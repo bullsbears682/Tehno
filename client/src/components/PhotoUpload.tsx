@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Image, QrCode, Copy, Check, AlertCircle, Loader, CreditCard, Hash, ExternalLink } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import axios from 'axios';
+import { playSound } from '../utils/sounds';
 import './PhotoUpload.css';
 
 interface PhotoUploadProps {
@@ -43,8 +44,10 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
       };
       reader.readAsDataURL(file);
       setError('');
+      playSound.upload(); // Play upload sound
     } else {
       setError('Please select a valid image file');
+      playSound.error(); // Play error sound
     }
   }, []);
 
@@ -64,6 +67,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
 
     setLoading(true);
     setError('');
+    playSound.processing(); // Play processing sound
 
     try {
       const formData = new FormData();
@@ -77,8 +81,10 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
 
       setPaymentInfo(response.data);
       setStep('payment');
+      playSound.blockchain(); // Play blockchain sound
     } catch (error: any) {
       setError(error.response?.data?.error || 'Failed to upload photo');
+      playSound.error(); // Play error sound
     } finally {
       setLoading(false);
     }
@@ -87,6 +93,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
+    playSound.copy(); // Play copy sound
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -94,18 +101,22 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
     if (!paymentInfo) return;
 
     setPaymentStatus('checking');
+    playSound.processing(); // Play processing sound
     try {
       const response = await axios.get(`/api/payment/status/${paymentInfo.photoId}`);
       if (response.data.status === 'confirmed') {
         setPaymentStatus('confirmed');
         setStep('confirmation');
+        playSound.confirmation(); // Play confirmation sound
         setTimeout(onSuccess, 2000);
       } else {
         setPaymentStatus('pending');
+        playSound.notification(); // Play notification sound
       }
     } catch (error) {
       console.error('Failed to check payment status:', error);
       setPaymentStatus('pending');
+      playSound.error(); // Play error sound
     }
   };
 
@@ -113,6 +124,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
     if (!transactionHash || !paymentInfo) return;
 
     setLoading(true);
+    playSound.processing(); // Play processing sound
     try {
       const response = await axios.post('/api/payment/verify', {
         photoId: paymentInfo.photoId,
@@ -122,12 +134,15 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
       if (response.data.status === 'confirmed') {
         setPaymentStatus('confirmed');
         setStep('confirmation');
+        playSound.success(); // Play success sound
         setTimeout(onSuccess, 2000);
       } else {
         setError('Transaction not found or invalid. Please check the hash and try again.');
+        playSound.error(); // Play error sound
       }
     } catch (error: any) {
       setError(error.response?.data?.error || 'Failed to verify transaction');
+      playSound.error(); // Play error sound
     } finally {
       setLoading(false);
     }
@@ -220,13 +235,14 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
                   />
                 </div>
 
-                <motion.button
-                  className="proceed-button"
-                  onClick={initiateUpload}
-                  disabled={loading}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
+                                 <motion.button
+                   className="proceed-button"
+                   onClick={initiateUpload}
+                   disabled={loading}
+                   onMouseEnter={() => playSound.hover()}
+                   whileHover={{ scale: 1.02 }}
+                   whileTap={{ scale: 0.98 }}
+                 >
                   {loading ? (
                     <>
                       <Loader className="spinning" size={20} />
@@ -299,10 +315,11 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
                     <label>Wallet Address:</label>
                     <div className="copyable-field">
                       <code>{MAIN_WALLET}</code>
-                      <button
-                        className="copy-button"
-                        onClick={() => copyToClipboard(MAIN_WALLET)}
-                      >
+                                             <button
+                         className="copy-button"
+                         onClick={() => copyToClipboard(MAIN_WALLET)}
+                         onMouseEnter={() => playSound.hover()}
+                       >
                         {copied ? <Check size={16} /> : <Copy size={16} />}
                       </button>
                     </div>
@@ -431,12 +448,13 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({ onSuccess }) => {
               </div>
             </div>
 
-            <motion.button
-              className="view-gallery-button"
-              onClick={onSuccess}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+                         <motion.button
+               className="view-gallery-button"
+               onClick={onSuccess}
+               onMouseEnter={() => playSound.hover()}
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+             >
               View in Gallery
             </motion.button>
           </motion.div>
