@@ -86,12 +86,12 @@ const upload = multer({
     }
 });
 
-// Generate unique payment address (simplified - in production use HD wallets)
+// Generate unique payment address - using main wallet for simplicity
 function generatePaymentAddress() {
-    const wallet = ethers.Wallet.createRandom();
+    const mainWallet = process.env.MAIN_WALLET_ADDRESS || '0x13322cc8958e50ed5363442352d0D1110C8768dA';
     return {
-        address: wallet.address,
-        privateKey: wallet.privateKey,
+        address: mainWallet,
+        privateKey: null, // We don't need private key for receiving
     };
 }
 
