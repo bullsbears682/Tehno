@@ -1,0 +1,212 @@
+/* Mobile/Termux Optimized Styles */
+@media (max-width: 768px) {
+  /* Reduce animations for better performance */
+  *, *::before, *::after {
+    animation-duration: 0.2s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.2s !important;
+  }
+
+  /* Optimize for touch */
+  button, .nav-btn, .copy-button, .like-button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 12px 16px !important;
+  }
+
+  /* Reduce blur effects for performance */
+  .header, .photo-card, .upload-zone, .payment-card {
+    backdrop-filter: blur(5px) !important;
+  }
+
+  /* Optimize text sizes for mobile */
+  .hero-title {
+    font-size: 2rem !important;
+  }
+
+  .upload-header h2, .payment-header h2 {
+    font-size: 1.8rem !important;
+  }
+
+  /* Optimize spacing */
+  .main {
+    padding: 1rem !important;
+  }
+
+  .photo-upload {
+    padding: 1rem !important;
+  }
+
+  /* Reduce photo grid columns for mobile */
+  .photos-container.grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Optimize modal for mobile */
+  .photo-modal {
+    margin: 0.5rem !important;
+    max-width: calc(100vw - 1rem) !important;
+    max-height: calc(100vh - 1rem) !important;
+  }
+
+  .modal-content {
+    flex-direction: column !important;
+  }
+
+  .modal-info {
+    width: 100% !important;
+    padding: 1rem !important;
+    max-height: 50vh !important;
+  }
+
+  /* Optimize QR code for mobile */
+  .qr-container {
+    max-width: 180px !important;
+  }
+
+  /* Touch-friendly search */
+  .search-box {
+    min-width: unset !important;
+    width: 100% !important;
+  }
+
+  /* Optimize payment cards */
+  .payment-methods {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Reduce gradient complexity for performance */
+  .gradient-text {
+    background: linear-gradient(45deg, #ff6b6b, #48dbfb) !important;
+    animation: none !important;
+  }
+
+  /* Optimize hero stats */
+  .hero-stats {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .stat-card {
+    padding: 1rem !important;
+  }
+
+  /* Optimize upload zone */
+  .upload-zone {
+    padding: 2rem 1rem !important;
+  }
+
+  /* Optimize photo overlay */
+  .photo-overlay {
+    opacity: 1 !important; /* Always show on mobile */
+  }
+
+  /* Optimize progress bar */
+  .progress-fill::after {
+    display: none !important; /* Remove shimmer effect */
+  }
+}
+
+/* Termux specific optimizations */
+@media (max-width: 480px) {
+  /* Further reduce for very small screens */
+  .photos-container.grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gallery-header {
+    text-align: center !important;
+  }
+
+  .gallery-controls {
+    width: 100% !important;
+  }
+
+  .filter-controls {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  /* Optimize font sizes */
+  .hero-title {
+    font-size: 1.5rem !important;
+  }
+
+  .gallery-title h2 {
+    font-size: 1.8rem !important;
+  }
+
+  /* Optimize buttons */
+  .cta-button, .proceed-button, .view-gallery-button {
+    width: 100% !important;
+    margin: 1rem 0 !important;
+  }
+
+  /* Optimize payment details */
+  .copyable-field {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  .copyable-field code {
+    word-break: break-all !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* Optimize verification input */
+  .verify-input {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  .verify-button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* Dark mode optimizations for mobile */
+@media (max-width: 768px) and (prefers-color-scheme: dark) {
+  body {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+  }
+
+  .photo-card, .upload-zone, .payment-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+/* Performance optimizations */
+.photo-card img {
+  will-change: auto !important;
+}
+
+.loading-spinner {
+  animation: spin 2s linear infinite !important; /* Slower animation */
+}
+
+/* Touch feedback */
+button:active, .photo-card:active {
+  transform: scale(0.98) !important;
+  transition: transform 0.1s ease !important;
+}
+
+/* Optimize scrolling */
+.photos-container {
+  scroll-behavior: smooth !important;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .photo-card:hover {
+    transform: none !important;
+  }
+}
